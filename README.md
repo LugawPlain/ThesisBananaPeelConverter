@@ -1,2 +1,1 @@
-# ThesisBananaPeelConverter
-Code for our Thesis Banana Peel Converter
+HELLO WORLD!
