@@ -36,6 +36,7 @@ void setup()
 
 void loop()
 {
+    Serial.println("Start");
     lcd.clear();
     lcd.print("Start");
     digitalWrite(Fan, LOW);
@@ -44,10 +45,11 @@ void loop()
     for (int i = 0; i <= 180; i += 15)
     {
         servo1.write(i);
+        Serial.print("Servo pos = ");
+        Serial.println(i);
         lcd.clear();
-
         lcd.setCursor(0, 1);
-        lcd.print("Servo pos");
+        lcd.print("Servo pos = ");
         lcd.print(i);
         delay(1000);
     }
