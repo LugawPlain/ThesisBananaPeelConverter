@@ -10,7 +10,7 @@ const int grinderButton = 3;
 const int mixerButton = 4;
 const int cookerButton = 5;
 const int StartButton = 6;
-const int StopButton = 7;
+const int stopButton = 7;
 
 const int heatlampRelay = 8; // Pin ng mga Relays
 const int servoPWM = 9;
@@ -23,8 +23,23 @@ int servo1angle = 0;
 
 int state = 0;
 
+void stopInterrupt()
+{
+    if (stopButton == LOW)
+    {
+        lcd.clear();
+        lcd.print("Stopping");
+        dehydratorOff();
+        grinderOff();
+        delay(5000);
+        lcd.print("Stopped");
+        delay(2000);
+    }
+}
+
 void setup()
 {
+    attachInterrupt(digitalPinToInterrupt(stopButton), stopInterrupt, CHANGE);
     Serial.begin(9600);
     lcd.begin();
     lcd.display();
@@ -36,6 +51,8 @@ void setup()
     pinMode(grinderButton, INPUT_PULLUP);
     pinMode(mixerButton, INPUT_PULLUP);
     pinMode(cookerButton, INPUT_PULLUP);
+    pinMode(StartButton, INPUT_PULLUP);
+    pinMode(stopButton, INPUT_PULLUP);
     lcd.setCursor(0, 1);
     lcd.print("Buttons");
     delay(1000);
@@ -90,6 +107,9 @@ void setup()
     //     //     }
     //     // }
     //     Wire.endTransmission();
+    lcd.setCursor(0, 1);
+    lcd.print("Grinder");
+    delay(1000);
 
     lcd.clear();
     lcd.setCursor(0, 0);
@@ -173,6 +193,10 @@ void loop()
         {
             state = 4;
         }
+        if (digitalRead(StartButton == LOW))
+        {
+            state = 5;
+        }
     }
     switch (state)
     {
@@ -187,6 +211,14 @@ void loop()
     case (3):
         break;
     case (4):
+        break;
+    case (5):
+        dehydratorOn();
+        dehydratorOff();
+        delay(5000);
+        grinderOn();
+        grinderOff();
+        delay(5000);
         break;
     }
     state = 0;
@@ -224,8 +256,6 @@ void dehydratorOn()
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Dehydrating");
-    lcd.setCursor(0, 1);
-    threedots();
     delay(1000 * 60 * 60 * 8); // delay 8 hours
     servo1.write(45);
 }
@@ -261,6 +291,13 @@ void dehydratorOff()
 
 void grinderOn()
 {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Grinder ON");
+    delay(1000);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Grinding");
     for (int i = 0; i < 60; i++)
     {
         digitalWrite(grinderRelay, LOW);
@@ -272,6 +309,10 @@ void grinderOn()
 void grinderOff()
 {
     digitalWrite(grinderRelay, HIGH);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Grinding OFF");
+    delay(1000);
 }
 void mixerOn()
 {
@@ -322,19 +363,19 @@ void CookerOff()
 {
     digitaWrite(cookerRelay, LOW);
 }
-void threedots()
-{
-    lcd.setCursor(0, 1);
-    millis();
-    for (int i = 0; i < 3; i++)
-    {
-        lcd.setCursor(0, 1);
-        lcd.print(".");
-        delay(500);
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        lcd.setCursor(0, 1);
-        lcd.print("");
-    }
-}
+// void threedots()
+// {
+//     lcd.setCursor(0, 1);
+//     millis();
+//     for (int i = 0; i < 3; i++)
+//     {
+//         lcd.setCursor(0, 1);
+//         lcd.print(".");
+//         delay(500);
+//     }
+//     for (int i = 0; i < 3; i++)
+//     {
+//         lcd.setCursor(0, 1);
+//         lcd.print("");
+//     }
+// }

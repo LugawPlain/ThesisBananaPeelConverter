@@ -7,15 +7,20 @@ LCD_I2C lcd(0x27, 16, 2);
 char c;
 const int relay2 = A0;
 const int relay3 = A1;
-const int grinderRelay = 2;
-const int pumpRelay = 3;
-const int pump2Relay = 4;
-const int stepperRelay = 5;
-const int stepper2Relay = 6;
-const int servo2 = 7;
-const int servo3 = 8;
-const int servo2Relay = 9;
-const int servo3Relay = 10;
+const int pumpRelay = 2;
+const int pump2Relay = 3;
+const int stepperRelay = 4;
+const int stepper2Relay = 5;
+const int servo2Relay = 6;
+const int servo3Relay = 7;
+const int servo2 = 9;
+const int servo3 = 10;
+const int stepper1step = 11;
+const int stepper1dir = 12;
+const int stepper2step = 13;
+const int stepper2dir = ;
+const int cookerRelay = ;
+
 void setup()
 {
     pinMode(relay2, OUTPUT);
