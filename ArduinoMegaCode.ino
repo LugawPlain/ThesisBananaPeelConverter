@@ -19,6 +19,7 @@ int eggDuration = 0;
 int mixingTime = 0;
 int cookingTime = 0;
 
+const int resetPIN = 35;
 const int dehydratorButton = 2; // Pin ng mga Buttons
 const int grinderButton = 3;
 const int mixerButton = 4;
@@ -59,7 +60,27 @@ volatile int stopButton;
 volatile int state = 0;
 void stopInterrupt()
 {
-    
+    switch (state)
+    {
+    case 1:
+        dehydratorOff();
+        break;
+    case 2:
+        grinderOff();
+        break;
+    case 3:
+        mixerOff();
+        break;
+    case 4:
+        CookerOff();
+        break;
+    case 5:
+        dehydratorOff();
+        grinderOff();
+        mixerOff();
+        CookerOff();
+        break;
+    }
 }
 
 void setup()
@@ -72,6 +93,9 @@ void setup()
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Initializing");
+    digitalWrite(resetPIN, HIGH);
+    pinMode(resetPIN, OUTPUT);
+
     pinMode(dehydratorButton, INPUT_PULLUP);
     pinMode(grinderButton, INPUT_PULLUP);
     pinMode(mixerButton, INPUT_PULLUP);
@@ -106,10 +130,8 @@ void setup()
     lcd.setCursor(0, 0);
     lcd.print("Initializing");
 
-    // pinMode(relay2, OUTPUT);
     pinMode(grinderRelay, OUTPUT);
     digitalWrite(grinderRelay, HIGH);
-    // digitalWrite(relay2, HIGH);
 
     lcd.setCursor(0, 1);
     lcd.print("Grinder");
@@ -118,7 +140,8 @@ void setup()
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Initializing");
-
+    digitalWrite(relay2, HIGH);
+    pinMode(relay2, OUTPUT);
     pinMode(relay3, OUTPUT);
     pinMode(pumpRelay, OUTPUT);
     pinMode(pump2Relay, OUTPUT);
@@ -250,37 +273,37 @@ void dehydratorOn()
 }
 void dehydratorOff()
 {
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Servo OFF");
+    // lcd.clear();
+    // lcd.setCursor(0, 0);
+    // lcd.print("Servo OFF");
     servo1.write(45);
     digitalWrite(servoRelay, HIGH);
-    delay(1000);
+    // delay(1000);
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Fan OFF");
+    // lcd.clear();
+    // lcd.setCursor(0, 0);
+    // lcd.print("Fan OFF");
     digitalWrite(fanRelay, HIGH);
-    delay(1000);
+    // delay(1000);
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Heat Lamp OFF");
+    // lcd.clear();
+    // lcd.setCursor(0, 0);
+    // lcd.print("Heat Lamp OFF");
     digitalWrite(heatlampRelay, HIGH);
-    delay(1000);
+    // delay(1000);
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Ceramic OFF");
-    lcd.setCursor(0, 1);
-    lcd.print("Heater");
+    // lcd.clear();
+    // lcd.setCursor(0, 0);
+    // lcd.print("Ceramic OFF");
+    // lcd.setCursor(0, 1);
+    // lcd.print("Heater");
     digitalWrite(ceramicheaterRelay, HIGH);
-    delay(1000);
+    // delay(1000);
 
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Dehydrator OFF");
-    delay(1000);
+    // delay(1000);
 }
 
 void grinderOn()
@@ -306,7 +329,7 @@ void grinderOff()
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Grinding OFF");
-    delay(1000);
+    // delay(1000);
 }
 void mixerOn()
 {
@@ -345,7 +368,7 @@ void mixerOff()
     digitalWrite(pumpRelay, HIGH);
     digitalWrite(pump2Relay, HIGH);
     digitalWrite(mixerRelay, HIGH);
-    delay(1000);
+    // delay(1000);
 }
 void CookerOn()
 {
@@ -403,25 +426,25 @@ void CookerOn()
 }
 void CookerOff()
 {
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Cooker OFF");
+    // lcd.clear();
+    // lcd.setCursor(0, 0);
+    // lcd.print("Cooker OFF");
     digitalWrite(cookerRelay, HIGH);
-    delay(cookingTime);
+    // delay(cookingTime);
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("ServoHose");
-    lcd.setCursor(0, 1);
-    lcd.print("POS one");
+    // lcd.clear();
+    // lcd.setCursor(0, 0);
+    // lcd.print("ServoHose");
+    // lcd.setCursor(0, 1);
+    // lcd.print("POS one");
     servo2.write(servo2Pos1Angle);
-    delay(1000);
+    // delay(1000);
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Servo Open");
+    // lcd.clear();
+    // lcd.setCursor(0, 0);
+    // lcd.print("Servo Open");
     servo3.write(servo3OpenAngle);
-    delay(1000);
+    // delay(1000);
 }
 // void threedots()
 // {
@@ -439,3 +462,10 @@ void CookerOff()
 //         lcd.print("");
 //     }
 // }
+void resetArduino()
+{
+    // Perform a software reset by pulsing the reset pin to ground
+    digitalWrite(RESET, LOW);  // Pull the reset pin LOW
+    delay(10);                 // Wait for a short duration
+    digitalWrite(RESET, HIGH); // Release the reset pin
+}
