@@ -81,6 +81,7 @@ void stopInterrupt()
         CookerOff();
         break;
     }
+    digitalWrite(resetPIN, LOW);
 }
 
 void setup()
@@ -462,10 +463,3 @@ void CookerOff()
 //         lcd.print("");
 //     }
 // }
-void resetArduino()
-{
-    // Perform a software reset by pulsing the reset pin to ground
-    digitalWrite(RESET, LOW);  // Pull the reset pin LOW
-    delay(10);                 // Wait for a short duration
-    digitalWrite(RESET, HIGH); // Release the reset pin
-}
