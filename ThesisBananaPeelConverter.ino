@@ -20,6 +20,7 @@ void setup()
     lcd.print("Initializing..");
     lcd.print("Initializing...");
     delay(2000);
+    lcd.clear();
     servo1.attach(9);
     pinMode(Button, INPUT_PULLUP);
     pinMode(Fan, OUTPUT);
@@ -40,7 +41,12 @@ void loop()
     lcd.clear();
     lcd.print("Start");
     digitalWrite(Fan, LOW);
+    lcd.clear();
+    lcd.print("Start Fan");
+    delay(2000);
     digitalWrite(RelayServo, LOW);
+    lcd.print("Start Servo");
+    delay(2000);
 
     for (int i = 0; i <= 180; i += 15)
     {
